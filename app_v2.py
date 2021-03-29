@@ -41,15 +41,9 @@ class Test(Enum):
     RANDOM_MODEL = auto()
     Q_LEARNING = auto()
     Q_ELIGIBILITY = auto()
-    SARSA = auto()
-    SARSA_ELIGIBILITY = auto()
-    DEEP_Q = auto()
-    LOAD_DEEP_Q = auto()
-    SPEED_TEST_1 = auto()
-    SPEED_TEST_2 = auto()
-    
+    #       
 
-def runMain(maze):   
+def runMain(matrix):   
     test = Test.RANDOM_MODEL    # which test to run
     
     # maze = np.array([
@@ -66,7 +60,7 @@ def runMain(maze):
     
     
     
-    game = Maze(maze)
+    game = Maze(matrix)
     
     # only show the maze
     if test == Test.SHOW_MAZE_ONLY:
@@ -93,25 +87,25 @@ def runMain(maze):
         h, w, _, _ = model.train(discount=0.90, exploration_rate=0.10, learning_rate=0.10, episodes=200,
                                  stop_at_convergence=True)
     
-    # train using tabular SARSA learning
-    if test == Test.SARSA:
-        game.render(Render.TRAINING)
-        model = models.SarsaTableModel(game)
-        h, w, _, _ = model.train(discount=0.90, exploration_rate=0.10, learning_rate=0.10, episodes=200,
-                                 stop_at_convergence=True)
+    # # train using tabular SARSA learning
+    # if test == Test.SARSA:
+    #     game.render(Render.TRAINING)
+    #     model = models.SarsaTableModel(game)
+    #     h, w, _, _ = model.train(discount=0.90, exploration_rate=0.10, learning_rate=0.10, episodes=200,
+    #                              stop_at_convergence=True)
     
-    # train using tabular SARSA learning and an eligibility trace
-    if test == Test.SARSA_ELIGIBILITY:
-        game.render(Render.TRAINING)  # shows all moves and the q table; nice but slow.
-        model = models.SarsaTableTraceModel(game)
-        h, w, _, _ = model.train(discount=0.90, exploration_rate=0.10, learning_rate=0.10, episodes=200,
-                                 stop_at_convergence=True)
-    # train using a neural network with experience replay (also saves the resulting model)
-    if test == Test.DEEP_Q:
-        game.render(Render.TRAINING)
-        model = models.QReplayNetworkModel(game)
-        h, w, _, _ = model.train(discount=0.80, exploration_rate=0.10, episodes=maze.size * 10, max_memory=maze.size * 4,
-                                 stop_at_convergence=True)
+    # # train using tabular SARSA learning and an eligibility trace
+    # if test == Test.SARSA_ELIGIBILITY:
+    #     game.render(Render.TRAINING)  # shows all moves and the q table; nice but slow.
+    #     model = models.SarsaTableTraceModel(game)
+    #     h, w, _, _ = model.train(discount=0.90, exploration_rate=0.10, learning_rate=0.10, episodes=200,
+    #                              stop_at_convergence=True)
+    # # train using a neural network with experience replay (also saves the resulting model)
+    # if test == Test.DEEP_Q:
+    #     game.render(Render.TRAINING)
+    #     model = models.QReplayNetworkModel(game)
+    #     h, w, _, _ = model.train(discount=0.80, exploration_rate=0.10, episodes=maze.size * 10, max_memory=maze.size * 4,
+    #                              stop_at_convergence=True)
     
     # draw graphs showing development of win rate and cumulative rewards
     try:
@@ -448,12 +442,20 @@ class PageOne(tk.Frame):
                                   relief = 'groove')
         random_button.grid(row = 2, column = 0)
         
-        '''Botón para obtener matriz con el mapa codificado, su visualización y la opción de resolver el laberinto'''
+        '''Botón para obtener matriz con el mapa codificado y su visualización '''
         self.button.append(tk.Button(self.opciones3_frame, text = 'Obtener escenario', command = self.get_matrix,
                                      fg = 'blue', bg = 'white', font = ('Trebuchet MS', 17),
                                      relief = 'groove'))
-        self.button[-1].grid(row = 1, column = 0, pady = 5)    
-    
+        self.button[-1].grid(row = 1, column = 0, pady = 5) 
+        
+        import pdb; pdb.set_trace()
+        
+        
+        self.button.append(tk.Button(self.opciones3_frame, text='Resuelve matriz', command = runMain(self.get_matrix()),fg = 'blue', 
+                              bg = 'white', font = ('Trebuchet MS', 17),relief = 'groove'))
+        self.button[-1].grid(row = 2, column = 0, pady = 5) 
+        plt.imshow(self.matrix, cmap = 'Reds', interpolation = 'nearest')
+        plt.show()
     '''Método para obtener matriz a partir del contenido de los Entry'''    
     def get_matrix(self):
         
@@ -469,30 +471,34 @@ class PageOne(tk.Frame):
                     row_values.append(0)
             self.checks_values.append(row_values)           
             
-        self.matriz = np.array(self.checks_values)
-        print(self.matriz)
+        matriz = np.array(self.checks_values)
+        print(matriz.size)
+        print(matriz)
         
         self.celda_salida = (int(self.start_cell.get().split(',')[0][1:]), int(self.start_cell.get().split(',')[1][:-1]))
         self.celda_llegada = (int(self.exit_cell.get().split(',')[0][1:]), int(self.exit_cell.get().split(',')[1][:-1]))
         
-        def highlight_cell(x,y, ax=None, **kwargs):
-            rect = plt.Rectangle((x-.5, y-.5), 1,1, fill=False, **kwargs)
-            ax = ax or plt.gca()
-            ax.add_patch(rect)
-            return rect   
+         
         #print(maze)
-        plt.imshow(self.matriz, cmap = 'Reds', interpolation = 'nearest')
+        
+        
         # start_entry
         # 
         
         highlight_cell(int(self.celda_salida[1]),int(self.celda_salida[0]), color="limegreen", linewidth=3)
         highlight_cell(int(self.celda_llegada[1]),int(self.celda_llegada[0]), color="blue", linewidth=3)
         
+        self.matrix = matriz
         
-       
-        return
+        # mazeshow = plt.show()
+        return self.matrix 
         
-    
+        # resolver_matriz = tk.Button(self.maze_frame, text = 'Resuelve matriz',command = print('Hola'), #command = runMain(self.matriz),
+        #                       fg = 'blue', bg = 'white', font = ('Trebuchet MS', 9),
+        #                       relief = 'groove')
+        # resolver_matriz.grid(row = 4, column = 0)
+        
+           
 class PageTwo(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -585,7 +591,13 @@ class PageTwo(tk.Frame):
            print()
 
         resuelve_matriz = tk.Button(self, text = 'Resuelve matriz', command = runMain(nim))
-        resuelve_matriz.grid(row =5, column =0, sticky = 'w')                           
+        resuelve_matriz.grid(row =5, column =0, sticky = 'w')         
+
+def highlight_cell(x,y, ax=None, **kwargs):
+            rect = plt.Rectangle((x-.5, y-.5), 1,1, fill=False, **kwargs)
+            ax = ax or plt.gca()
+            ax.add_patch(rect)
+            return rect                   
         
 if __name__ == "__main__":
     app = SampleApp()
