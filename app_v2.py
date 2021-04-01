@@ -445,17 +445,16 @@ class PageOne(tk.Frame):
         '''Botón para obtener matriz con el mapa codificado y su visualización '''
         self.button.append(tk.Button(self.opciones3_frame, text = 'Obtener escenario', command = self.get_matrix,
                                      fg = 'blue', bg = 'white', font = ('Trebuchet MS', 17),
-                                     relief = 'groove'))
+                                     relief  = 'groove'))
         self.button[-1].grid(row = 1, column = 0, pady = 5) 
         
-        import pdb; pdb.set_trace()
+        #  import pdb; pdb.set_trace()
         
-        
-        self.button.append(tk.Button(self.opciones3_frame, text='Resuelve matriz', command = runMain(self.get_matrix()),fg = 'blue', 
+        # ''' Botón para resolver la matriz, se vuelve a obtener la matriz'''
+        self.button.append(tk.Button(self.opciones3_frame, text='Resuelve matriz', command = self.resuelve_matriz,fg = 'blue', 
                               bg = 'white', font = ('Trebuchet MS', 17),relief = 'groove'))
         self.button[-1].grid(row = 2, column = 0, pady = 5) 
-        plt.imshow(self.matrix, cmap = 'Reds', interpolation = 'nearest')
-        plt.show()
+        
     '''Método para obtener matriz a partir del contenido de los Entry'''    
     def get_matrix(self):
         
@@ -489,16 +488,38 @@ class PageOne(tk.Frame):
         highlight_cell(int(self.celda_llegada[1]),int(self.celda_llegada[0]), color="blue", linewidth=3)
         
         self.matrix = matriz
-        
+        plt.imshow(self.matrix, cmap = 'Reds', interpolation = 'nearest')
+        plt.show()
         # mazeshow = plt.show()
-        return self.matrix 
+        return 
         
         # resolver_matriz = tk.Button(self.maze_frame, text = 'Resuelve matriz',command = print('Hola'), #command = runMain(self.matriz),
         #                       fg = 'blue', bg = 'white', font = ('Trebuchet MS', 9),
         #                       relief = 'groove')
         # resolver_matriz.grid(row = 4, column = 0)
         
-           
+    def resuelve_matriz(self):
+        self.checks_values = []
+    
+        '''Se rellenan las listas para confeccionar el array posteriormente'''
+        for row in range(0, self.row_number):
+            row_values = []
+            for col in range(0, self.col_number):
+                try:
+                    row_values.append(round(float(self.matrix_elements[str(row) + str(col)].get()), 1))
+                except:
+                    row_values.append(0)
+            self.checks_values.append(row_values)           
+            
+        matriz = np.array(self.checks_values)
+        print(matriz.size)
+        print(matriz)
+        
+        self.celda_salida = (int(self.start_cell.get().split(',')[0][1:]), int(self.start_cell.get().split(',')[1][:-1]))
+        self.celda_llegada = (int(self.exit_cell.get().split(',')[0][1:]), int(self.exit_cell.get().split(',')[1][:-1]))
+        self.matrix = matriz
+        runMain(self.matrix)
+       
 class PageTwo(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -540,10 +561,13 @@ class PageTwo(tk.Frame):
                                    )
         imprimeLaberinto.grid(row = 4, column = 0, sticky = 'w')
         
+        resuelveImagen = tk.Button(self, text = 'Resuelve el laberinto', command = self.resuelve_imagen
+                                   )
+        resuelveImagen.grid(row = 5, column = 0, sticky = 'w')
         
         button = tk.Button(self, text="Go to the start page",
                            command=lambda: controller.show_frame("StartPage"))
-        button.grid(row =6, column =0, sticky = 'w')
+        button.grid(row =8, column =0, sticky = 'w')
         
      
     def getFolderPath(self):
@@ -576,7 +600,7 @@ class PageTwo(tk.Frame):
         binary = binary.resize((w//2,h//2),Image.NEAREST)
         w, h = binary.size
         
-        
+        print(binary)
         nim = np.array(binary)
         
       
@@ -590,9 +614,33 @@ class PageTwo(tk.Frame):
                print(nim[r,c],end='')
            print()
 
-        resuelve_matriz = tk.Button(self, text = 'Resuelve matriz', command = runMain(nim))
-        resuelve_matriz.grid(row =5, column =0, sticky = 'w')         
-
+        # resuelve_matriz = tk.Button(self, text = 'Resuelve matriz', command = runMain(nim))
+        # resuelve_matriz.grid(row =5, column =0, sticky = 'w')         
+    def resuelve_imagen(self):
+        load = Image.open(str(self.E.get()))
+        render = ImageTk.PhotoImage(load)
+        img = Label(self, image=render)
+        img.image = render
+        
+        # self.opciones6_frame = tk.Frame(self)
+        # self.opciones6_frame.config(bg = 'white')
+        # self.opciones6_frame.pack(anchor = 'w', padx = 60, pady = 60)   
+        
+        img.place(x=100, y=250)
+        im = Image.open(str(self.E.get())).convert('L')
+        w, h = im.size
+        
+        
+        binary = im.point(lambda p: p < 128 and 1)
+        
+       
+        binary = binary.resize((w//2,h//2),Image.NEAREST)
+        w, h = binary.size
+        
+        
+        self.nim = np.array(binary)
+        runMain(self.nim)
+       
 def highlight_cell(x,y, ax=None, **kwargs):
             rect = plt.Rectangle((x-.5, y-.5), 1,1, fill=False, **kwargs)
             ax = ax or plt.gca()
