@@ -1,6 +1,6 @@
 # Aplicación de Reinforcement Learning a la optimización de un sistema de reparto mediante drones.
 
-Trabajo Final Máster Grupo 2 de la Clase 31 del Máster en Finance y Data Science de la EAE.
+Trabajo Final de Máster del Grupo 2 de la Clase 31 del Máster en Finance y Data Science de la EAE.
 
 ## Comenzando 🚀
 
