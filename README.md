@@ -11,6 +11,12 @@ _Estas instrucciones te permitirán obtener una copia del proyecto en funcionami
 _Que cosas necesitas para instalar el software y como instalarlas_
 
 ```
-Instalación de Python 3 ![image](https://user-images.githubusercontent.com/53310890/119223232-7c009200-baf8-11eb-9959-4a43480ba0a9.png)
-
+Instalación de Python 3 🐍 
 ```
+
+## Autores ✒️
+
+* **Pablo Azagra García **
+* **Paula Martinez García** 
+* * **María del Mar Muñoz Alonso** 
+* * * **Pablo Pérez Fraile** 
