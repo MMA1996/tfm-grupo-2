@@ -25,5 +25,5 @@ _Sigue los siguientes pasos para desplegar NaviDrone_
 
 * **Pablo Azagra García **
 * **Paula Martinez García** 
-* * **María del Mar Muñoz Alonso** 
-* * * **Pablo Pérez Fraile** 
+* **María del Mar Muñoz Alonso** 
+* **Pablo Pérez Fraile** 
