@@ -23,6 +23,8 @@ _Sigue los siguientes pasos para desplegar NaviDrone_
 
 ## Autores ✒️
 
+_Este trabajo TFM ha sido desarrollado por:_
+
 * **Pablo Azagra García **
 * **Paula Martinez García** 
 * **María del Mar Muñoz Alonso** 
