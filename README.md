@@ -8,7 +8,7 @@ _Estas instrucciones te permitirán obtener una copia del proyecto en funcionami
 
 ### Pre-requisitos 📋
 
-_Que cosas necesitas para instalar el software_
+_Que cosas necesitas para instalar el NaviDrone_
 
 ```
 Instalación de Python 3 🐍 
