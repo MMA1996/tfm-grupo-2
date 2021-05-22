@@ -8,11 +8,18 @@ _Estas instrucciones te permitirán obtener una copia del proyecto en funcionami
 
 ### Pre-requisitos 📋
 
-_Que cosas necesitas para instalar el software y como instalarlas_
+_Que cosas necesitas para instalar el software_
 
 ```
 Instalación de Python 3 🐍 
 ```
+
+### Instalación 🔧
+
+_Sigue los siguientes pasos para desplegar NaviDrone_
+* Clona el repositorio en tu máquina.
+* Run app.py para lanzar la herramienta NaviDrone.
+* Run main3d para probar el modelo tridimensional desarrollado.
 
 ## Autores ✒️
 
